@@ -1,0 +1,25 @@
+# Ignore node_modules to avoid copying unnecessary files
+node_modules
+npm-debug.log
+
+# Ignore local environment files
+.env
+.env.*
+
+# Ignore git files
+.git
+.gitignore
+
+# Ignore build outputs (will be created in the container)
+dist
+
+# Ignore Docker files
+.dockerignore
+Dockerfile
+
+# Ignore other temporary or system files
+*.swp
+*.temp
+*.log
+.DS_Store
+Thumbs.db
