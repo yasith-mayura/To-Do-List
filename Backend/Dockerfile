@@ -1,5 +1,5 @@
 # Use the official Ballerina image
-FROM ballerina/ballerina:2201.0
+FROM ballerina/ballerina
 
 # Set the working directory inside the container
 WORKDIR /ballerina
