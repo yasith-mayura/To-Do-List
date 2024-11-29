@@ -8,7 +8,7 @@ WORKDIR /ballerina
 COPY . .
 
 # Build the Ballerina application
-RUN bal build todo_service.bal
+RUN bal build todo-service.bal
 
 #--------------------------------------------------------------------------
 
