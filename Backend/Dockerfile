@@ -8,7 +8,7 @@ WORKDIR /ballerina
 COPY . .
 
 # Build the Ballerina application
-RUN bal build
+RUN bal clean && bal build
 
 #--------------------------------------------------------------------------
 
