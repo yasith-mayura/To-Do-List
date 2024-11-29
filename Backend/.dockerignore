@@ -1,0 +1,6 @@
+# Ignore git files
+.git
+.gitignore
+
+# Ignore build outputs (will be created in the container)
+target

@@ -1,14 +1,28 @@
-# Use the official Ballerina image
-FROM ballerina/ballerina
+# Stage 1: Build the Ballerina application
+FROM ballerina/ballerina:2201.10.3 as build
 
 # Set the working directory inside the container
 WORKDIR /ballerina
 
-# Copy the built Ballerina .bala file into the container
-COPY ./todo-service.bal /ballerina/todo-service.bal
+# Copy your Ballerina code into the container
+COPY . .
 
-# Expose the port that the Ballerina service will run on
+# Build the Ballerina application
+RUN bal build todo_service.bal
+
+#--------------------------------------------------------------------------
+
+# Stage 2: Use a lightweight JRE-based image to run the application
+FROM openjdk:17-jdk-alpine as runtime
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the built JAR file from the build stage
+COPY --from=build /ballerina/target/bin/Todo_service.jar /app/
+
+# Expose the application port
 EXPOSE 9090
 
-# Run the Ballerina service
-CMD ["bal", "run", "/ballerina/todo-service.bal"]
+# Command to run the .jar file
+CMD ["java", "-jar", "Todo_service.jar"]
