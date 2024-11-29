@@ -16,11 +16,17 @@ COPY . .
 # Build the application for production
 RUN npm run build
 
+# Verify the dist directory exists and has the expected contents
+RUN ls -al /app/dist
+
 #-----------------------------------------------------------------------------------
 
 
 # Stage 2: Serve the built app with a lightweight web server (Final stage)
 FROM nginx:alpine
+
+# Copy the custom Nginx configuration (if applicable)
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy the build output from the builder stage to Nginx's HTML directory
 COPY --from=builder /app/dist /usr/share/nginx/html
