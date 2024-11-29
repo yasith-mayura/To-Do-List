@@ -1,5 +1,5 @@
 # Stage 1: Build the Ballerina application
-FROM ballerina/ballerina:2201.10.3 as build
+FROM ballerina/ballerina:2201.10.3 AS build
 
 # Set the working directory inside the container
 WORKDIR /ballerina
@@ -8,12 +8,12 @@ WORKDIR /ballerina
 COPY . .
 
 # Build the Ballerina application
-RUN bal build todo-service.bal
+RUN bal build
 
 #--------------------------------------------------------------------------
 
 # Stage 2: Use a lightweight JRE-based image to run the application
-FROM openjdk:17-jdk-alpine as runtime
+FROM openjdk:17-jdk-alpine AS runtime
 
 # Set the working directory inside the container
 WORKDIR /app
