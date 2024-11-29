@@ -5,10 +5,10 @@ FROM ballerina/ballerina
 WORKDIR /ballerina
 
 # Copy the built Ballerina .bala file into the container
-COPY ./todo-service.bala /ballerina/todo-service.bala
+COPY ./todo-service.bal /ballerina/todo-service.bal
 
 # Expose the port that the Ballerina service will run on
 EXPOSE 9090
 
 # Run the Ballerina service
-CMD ["bal", "run", "/ballerina/todo-service.bala"]
+CMD ["bal", "run", "/ballerina/todo-service.bal"]
