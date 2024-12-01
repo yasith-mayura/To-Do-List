@@ -32,9 +32,9 @@ jobs:
     - name: Build and Push Docker Image
       uses: docker/build-push-action@v6
       with:
-        context: .
+        context: ./Backend
         push: true
-        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-backend
+        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-frontend
 
     - name: Log out from Amazon ECR
       run: docker logout ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
@@ -75,7 +75,7 @@ jobs:
 
           docker system prune -f
 
-          docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-node-app:latest
+          docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-frontend
     
-          docker run -d --name my-app -p 80:80 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-node-app:latest
+          docker run -d --name my-app -p 80:80 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-frontend
         EOF
