@@ -34,7 +34,7 @@ jobs:
       with:
         context: ./Frontend
         push: true
-        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-frontend
+        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-frontend:latest
 
     - name: Log out from Amazon ECR
       run: docker logout ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
@@ -52,7 +52,7 @@ jobs:
       run: sudo apt-get install -y openssh-client
 
     - name: Add SSH key
-      run: echo "${{ secrets.EC2_KEY }}" > mykey.pem && chmod 400 mykey.pem
+      run: echo "${{ secrets.EC2_KEY }}" > mykey.pem && chmod 444 mykey.pem
 
 
 
@@ -75,7 +75,7 @@ jobs:
 
           docker system prune -f
 
-          docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-frontend
+          docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-frontend:latest
     
-          docker run -d --name mayura/todolist-frontend -p 8080:80 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-frontend
+          docker run -d --name mayura/todolist-frontend -p 8080:80 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-frontend:latest
         EOF
