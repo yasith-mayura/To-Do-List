@@ -1,0 +1,105 @@
+name: Backend Build and Push Docker Image To AWS ECR Repo
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4.2.2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.7.1
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4.0.2
+
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Log in to Amazon ECR
+      run: |
+        aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v6
+      with:
+        context: ./Frontend
+        push: true
+        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-backend:latest
+
+    - name: Log out from Amazon ECR
+      run: docker logout ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+    
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push  # This line ensures the deploy job runs only after the build job is successful
+
+    steps:
+    - name: Update package list
+      run: sudo apt-get update
+
+    - name: Install SSH client
+      run: sudo apt-get install -y openssh-client
+
+    - name: Add SSH key
+      run: echo "${{ secrets.EC2_KEY }}" > mykey.pem && chmod 400 mykey.pem
+
+
+    - name: Access to Public EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no -i mykey.pem ${{ secrets.EC2_USER }}@${{ secrets.PUBLIC_EC2_HOST }} << 'EOF'
+          sudo apt-get update
+          uptime
+          sudo -i
+          apt-get install -y openssh-client
+          echo "${{ secrets.EC2_KEY }}" > mykey.pem && chmod 400 mykey.pem
+          
+        EOF
+
+    - name: Deploy to Private EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no -i mykey.pem ${{ secrets.EC2_USER }}@${{ secrets.PRIVATE_EC2_HOST }} << 'EOF'
+          sudo apt-get update
+          uptime
+          sudo -i
+          snap install aws-cli --classic
+    
+          if ! command -v docker &> /dev/null; then
+            echo "Docker not found. Installing Docker..."
+            sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+            echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            sudo apt-get update
+            sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+            sudo systemctl enable docker
+            sudo systemctl start docker
+            echo "Docker installed successfully."
+          else
+            echo "Docker is already installed."
+          fi
+    
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region ${{ secrets.AWS_REGION }}
+    
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+    
+          docker stop todolist-backend || true 
+          docker rm todolist-backend || true
+
+          docker system prune -f
+
+          docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-backend:latest
+    
+          docker run -d --name todolist-backend -p 9090:9090 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-backend:latest
+        EOF
