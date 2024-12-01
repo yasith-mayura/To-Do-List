@@ -1,5 +1,4 @@
-name: Ballerina Build and Test
-
+name: Backend Ballerina PR Tests and Build
 on:
   pull_request:
     branches:
@@ -14,33 +13,26 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4.2.2
 
-    #   # Step 2: Set up Ballerina
-    #   - name: Set up Ballerina
-    #     run: |
-    #       curl -L https://dist.ballerina.io/downloads/ballerina-2201.4.1/ballerina-2201.4.1-linux-x86_64.tar.gz | tar -xz -C /usr/local/
-    #       echo "Ballerina setup completed"
 
+      # Step 2: Install Ballerina .deb package
+      - name: Install Ballerina
+        run: |
+          # Download the latest Ballerina .deb package
+          curl -L https://dist.ballerina.io/downloads/2201.10.3/ballerina-2201.10.3-swan-lake-linux-x64.deb -o ballerina.deb
 
-      - name: Ballerina Action
-        uses: ballerina-platform/ballerina-action@2201.10.1
+          # Install the .deb package
+          sudo dpkg -i ballerina.deb
 
-      - name: check version
-        run: bal -v
-
+          # Fix any missing dependencies (if required)
+          sudo apt-get install -f
 
       # Step 3: Build the Ballerina project
       - name: Build Ballerina project
         run: |
-          cd your-ballerina-project-directory  # Navigate to your project folder (adjust as needed)
-          /usr/local/ballerina-2201.4.1/bin/ballerina build
+          cd ./Backend
+          ballerina build 
 
-      # Step 4: Run tests
+      # Step 4: Run Ballerina tests
       - name: Run Ballerina tests
         run: |
-          /usr/local/ballerina-2201.4.1/bin/ballerina test your-ballerina-project-directory
-
-      # Step 5: (Optional) Linting and Static Code Analysis
-      - name: Run Ballerina Linter
-        run: |
-          /usr/local/ballerina-2201.4.1/bin/ballerina lint your-ballerina-project-directory
-
+          ballerina test your-ballerina-project-directory  # Run tests
