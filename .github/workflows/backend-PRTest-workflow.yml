@@ -1,0 +1,44 @@
+name: Backend Ballerina PR Tests and Build
+on:
+  pull_request:
+    branches:
+      - main  # Trigger on PR targeting the main branch
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v4.2.2
+
+
+      # Step 2: Install Ballerina .deb package
+      - name: Install Ballerina
+        run: |
+          # Download the latest Ballerina .deb package
+          curl -L https://dist.ballerina.io/downloads/2201.10.3/ballerina-2201.10.3-swan-lake-linux-x64.deb -o ballerina.deb
+
+          # Install the .deb package
+          sudo dpkg -i ballerina.deb
+
+          # Fix any missing dependencies (if required)
+          sudo apt-get install -f
+
+      # Step 3: Check version
+      - name: Build Ballerina version
+        run: bal -v
+    
+
+      # Step 4: Build the Ballerina project
+      - name: Build Ballerina project
+        run: |
+          ls -l
+          cd ./Backend
+          bal build 
+
+    #   # Step 4: Run Ballerina tests
+    #   - name: Run Ballerina tests
+    #     run: |
+    #       ballerina test your-ballerina-project-directory  # Run tests

@@ -1,4 +1,4 @@
-name: PR Tests and Build
+name: Frontend node PR Tests and Build
 
 on:
   pull_request:
