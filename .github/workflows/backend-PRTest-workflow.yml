@@ -1,4 +1,4 @@
-name: Backend Ballerina PR Tests and Build
+name: Backend Ballerina PR Build Test
 on:
   pull_request:
     branches:
@@ -38,7 +38,4 @@ jobs:
           cd ./Backend
           bal build 
 
-    #   # Step 4: Run Ballerina tests
-    #   - name: Run Ballerina tests
-    #     run: |
-    #       ballerina test your-ballerina-project-directory  # Run tests
+  
