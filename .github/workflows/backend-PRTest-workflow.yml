@@ -25,7 +25,7 @@ jobs:
         uses: ballerina-platform/ballerina-action@2201.10.1
 
       - name: check version
-        run: bal version
+        run: bal -v
 
 
       # Step 3: Build the Ballerina project
