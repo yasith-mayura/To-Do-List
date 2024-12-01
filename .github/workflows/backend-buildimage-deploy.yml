@@ -55,28 +55,20 @@ jobs:
       run: echo "${{ secrets.EC2_KEY }}" > mykey.pem && chmod 400 mykey.pem
 
 
-    - name: Access Private EC2 via Jump Host
+    - name: Access to Public EC2
       run: |
-        # Create an SSH config file to use the Jump Host
-        echo "Host jump-host" >> ~/.ssh/config
-        echo "  HostName ${{ secrets.PUBLIC_EC2_HOST }}" >> ~/.ssh/config
-        echo "  User ${{ secrets.EC2_USER }}" >> ~/.ssh/config
-        echo "  IdentityFile ~/mykey.pem" >> ~/.ssh/config
-        echo "  StrictHostKeyChecking no" >> ~/.ssh/config
-        echo "Host private-ec2" >> ~/.ssh/config
-        echo "  HostName ${{ secrets.PRIVATE_EC2_HOST }}" >> ~/.ssh/config
-        echo "  User ${{ secrets.EC2_USER }}" >> ~/.ssh/config
-        echo "  ProxyJump jump-host" >> ~/.ssh/config
-        echo "  IdentityFile ~/mykey.pem" >> ~/.ssh/config
-        echo "  StrictHostKeyChecking no" >> ~/.ssh/config
-        
-        # Test SSH connection to Private EC2 through the Jump Host
-        ssh private-ec2 "uptime"
+        ssh -o StrictHostKeyChecking=no -i mykey.pem ${{ secrets.EC2_USER }}@${{ secrets.PUBLIC_EC2_HOST }} << 'EOF'
+          sudo apt-get update
+          uptime
+          sudo -i
+          apt-get install -y openssh-client
+          echo "${{ secrets.EC2_KEY }}" > mykey.pem && chmod 400 mykey.pem
+          
+        EOF
 
     - name: Deploy to Private EC2
       run: |
-        # SSH into the private EC2 instance and run commands
-        ssh private-ec2 << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i mykey.pem ${{ secrets.EC2_USER }}@${{ secrets.PRIVATE_EC2_HOST }} << 'EOF'
           sudo apt-get update
           uptime
           sudo -i
