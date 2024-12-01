@@ -43,6 +43,13 @@ jobs:
     needs: test
     steps:
         - name: build the frontend
-          run: cd Frontend && npm run build
+          run: |
+           if [ -d "Frontend" ]; then
+             cd Frontend
+             npm run build
+           else
+             echo "Error: Frontend directory not found!"
+             exit 1
+           fi
 
       
