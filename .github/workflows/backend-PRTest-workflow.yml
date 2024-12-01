@@ -25,16 +25,18 @@ jobs:
 
           # Fix any missing dependencies (if required)
           sudo apt-get install -f
-    
-      - name: Build Ballerina project
+
+      # Step 3: Check version
+      - name: Build Ballerina version
         run: bal -v
     
 
       # Step 4: Build the Ballerina project
       - name: Build Ballerina project
         run: |
+          ls -l
           cd ./Backend
-          ballerina build 
+          bal build 
 
     #   # Step 4: Run Ballerina tests
     #   - name: Run Ballerina tests
