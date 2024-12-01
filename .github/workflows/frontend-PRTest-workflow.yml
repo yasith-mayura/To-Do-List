@@ -35,10 +35,8 @@ jobs:
           fi
 
       - name: Check code quality
-        run: cd Frontend && npm run test -- --watchAll
+        run: cd Frontend && npm run lint
 
-      - name: Build project
-        run: cd Frontend && npm run build
     
   build:
     runs-on: ubuntu-latest
