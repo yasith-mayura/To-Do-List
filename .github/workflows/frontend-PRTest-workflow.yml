@@ -1,0 +1,37 @@
+name: PR Tests and Build
+
+on:
+  pull_request:
+    branches:
+      - main  # or the branch you want to trigger the workflow on
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+    
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.1.0
+    
+
+      - name: Install dependencies
+        run: cd frontend && npm install
+
+      - name: Check code quality
+        run: cd frontend && npm run test -- --watchAll
+
+      - name: Build project
+        run: cd frontend && npm run build
+    
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+        - name: build the frontend
+          run: cd frontend && npm run build
+
+      
