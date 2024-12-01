@@ -18,8 +18,21 @@ jobs:
         uses: actions/setup-node@v4.1.0
     
 
-      - name: Install dependencies
-        run: cd ../../Frontend && npm install
+      - name: Debug Directory Structure
+        run: |
+          echo "Current Directory: $(pwd)"
+          ls -l
+          ls -l ../../
+
+      - name: Install Frontend Dependencies
+        run: |
+          if [ -d "../../Frontend" ]; then
+            cd ../../Frontend
+            npm install
+          else
+            echo "Error: Frontend directory not found!"
+            exit 1
+          fi
 
       - name: Check code quality
         run: cd ../../Frontend && npm run test -- --watchAll
