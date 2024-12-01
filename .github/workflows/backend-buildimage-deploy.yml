@@ -63,10 +63,10 @@ jobs:
           echo "SSH tunnel established to private EC2!"
           # You can now access the private EC2 instance via port 2222 on the runner
         EOF
-
+ 
     - name: Deploy to Private EC2
       run: |
-          ssh -o StrictHostKeyChecking=no -p 2222 -i mykey.pem ${{ secrets.EC2_USER }}@localhost << 'EOF'
+        ssh -o StrictHostKeyChecking=no -p 2222 -i mykey.pem ${{ secrets.EC2_USER }}@localhost << 'EOF'
           sudo apt-get update
           uptime
           sudo -i
