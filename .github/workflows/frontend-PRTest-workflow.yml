@@ -26,8 +26,8 @@ jobs:
 
       - name: Install Frontend Dependencies
         run: |
-          if [ -d "../../Frontend" ]; then
-            cd ../../Frontend
+          if [ -d "Frontend" ]; then
+            cd Frontend
             npm install
           else
             echo "Error: Frontend directory not found!"
@@ -35,16 +35,16 @@ jobs:
           fi
 
       - name: Check code quality
-        run: cd ../../Frontend && npm run test -- --watchAll
+        run: cd Frontend && npm run test -- --watchAll
 
       - name: Build project
-        run: cd ../../Frontend && npm run build
+        run: cd Frontend && npm run build
     
   build:
     runs-on: ubuntu-latest
     needs: test
     steps:
         - name: build the frontend
-          run: cd ../../Frontend && npm run build
+          run: cd Frontend && npm run build
 
       
