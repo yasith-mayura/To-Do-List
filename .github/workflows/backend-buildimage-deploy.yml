@@ -52,23 +52,21 @@ jobs:
       run: sudo apt-get install -y openssh-client
 
     - name: Add SSH key
-      run: echo "${{ secrets.EC2_KEY }}" > mykey.pem && chmod 400 mykey.pem
+      run: echo "${{ secrets.EC2_KEY }}" > mykey.pem && chmod 600 mykey.pem
 
 
-    - name: Access to Public EC2
+    - name: SSH into Public EC2 to access Private EC2
       run: |
-        ssh -o StrictHostKeyChecking=no -i mykey.pem ${{ secrets.EC2_USER }}@${{ secrets.PUBLIC_EC2_HOST }} << 'EOF'
-          sudo apt-get update
-          uptime
-          sudo -i
-          apt-get install -y openssh-client
-          echo "${{ secrets.EC2_KEY }}" > mykey.pem && chmod 400 mykey.pem
-          
+        # First, create a SSH tunnel to the private EC2 using the public EC2 as a jump host
+        ssh -o StrictHostKeyChecking=no -i mykey.pem -L 2222:${{ secrets.PRIVATE_EC2_HOST }}:22 ${{ secrets.EC2_USER }}@${{ secrets.PUBLIC_EC2_HOST }} << 'EOF'
+          # After logging into public EC2, set up a tunnel to the private EC2
+          echo "SSH tunnel established to private EC2!"
+          # You can now access the private EC2 instance via port 2222 on the runner
         EOF
 
     - name: Deploy to Private EC2
       run: |
-        ssh -o StrictHostKeyChecking=no -i mykey.pem ${{ secrets.EC2_USER }}@${{ secrets.PRIVATE_EC2_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -p 2222 -i mykey.pem ${{ secrets.EC2_USER }}@localhost << 'EOF'
           sudo apt-get update
           uptime
           sudo -i
