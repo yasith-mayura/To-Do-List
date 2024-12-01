@@ -53,6 +53,20 @@ jobs:
 
     - name: Add SSH key
       run: echo "${{ secrets.EC2_KEY }}" > mykey.pem && chmod 600 mykey.pem
+    
+    - name: Check if SSH server is running on port 2222
+      run: |
+        # Check if SSH is running on port 2222
+        if ! sudo netstat -tuln | grep ':2222'; then
+          echo "SSH service is not running on port 2222. Attempting to start SSH server."
+          sudo systemctl restart ssh
+        fi
+
+    - name: Allow port 2222 through firewall
+      run: |
+        # Allow port 2222 through the firewall
+        sudo ufw allow 2222
+
 
 
     - name: SSH into Public EC2 to access Private EC2
