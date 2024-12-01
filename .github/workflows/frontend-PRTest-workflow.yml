@@ -1,0 +1,50 @@
+name: PR Tests and Build
+
+on:
+  pull_request:
+    branches:
+      - main  # or the branch you want to trigger the workflow on
+
+jobs:
+  test :
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+    
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.1.0
+    
+
+      - name: Debug Directory Structure
+        run: |
+          echo "Current Directory: $(pwd)"
+          ls -l
+          ls -l ../../
+
+      - name: Install Frontend Dependencies
+        run: |
+          if [ -d "Frontend" ]; then
+            cd Frontend
+            npm install
+          else
+            echo "Error: Frontend directory not found!"
+            exit 1
+          fi
+
+      - name: Check code quality
+        run: cd Frontend && npm run lint
+
+      - name: build the frontend
+        run: |
+           if [ -d "Frontend" ]; then
+             cd Frontend
+             npm run build
+           else
+             echo "Error: Frontend directory not found!"
+             exit 1
+           fi
+
+      
