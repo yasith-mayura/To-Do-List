@@ -19,19 +19,19 @@ jobs:
     
 
       - name: Install dependencies
-        run: cd ../frontend && npm install
+        run: cd ../../frontend && npm install
 
       - name: Check code quality
-        run: cd ../frontend && npm run test -- --watchAll
+        run: cd ../../frontend && npm run test -- --watchAll
 
       - name: Build project
-        run: cd ../frontend && npm run build
+        run: cd ../../frontend && npm run build
     
   build:
     runs-on: ubuntu-latest
     needs: test
     steps:
         - name: build the frontend
-          run: cd ../frontend && npm run build
+          run: cd ../../frontend && npm run build
 
       
