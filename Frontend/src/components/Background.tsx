@@ -15,7 +15,7 @@ const Background = () => {
 
   useEffect(() => {
     axios
-      .get<Todolist[]>("http://localhost:9090/todo-service/todos")
+      .get<Todolist[]>("http://10.0.198.2:9090/todo-service/todos")
       .then((res) => setToDoList(res.data))
       .catch((err) => console.error("Error fetching todos", err));
   }, []);
@@ -37,7 +37,7 @@ const Background = () => {
     const originalTodos = [...toDoList];
 
     axios
-      .post("http://localhost:9090/todo-service/todos", newTodo)
+      .post("http://10.0.198.2:9090/todo-service/todos", newTodo)
       .then((res) => setToDoList([res.data, ...toDoList]))
       .catch((err) => {
         console.log(err);
@@ -50,7 +50,7 @@ const Background = () => {
     setToDoList(toDoList.filter((t) => t.id !== id));
 
     axios
-      .delete(`http://localhost:9090/todo-service/todos/${id}`)
+      .delete(`http://10.0.198.2:9090/todo-service/todos/${id}`)
       .catch((err) => {
         console.log(err);
         setToDoList(originalTodos);
@@ -67,7 +67,7 @@ const Background = () => {
       setToDoList(updatedTasks);
     }
 
-    axios.put("http://localhost:9090/todo-service/todos/" + id).catch((err) => {
+    axios.put("http://10.0.198.2:9090/todo-service/todos/" + id).catch((err) => {
       console.log(err);
       setToDoList(originalTodos);
     });
