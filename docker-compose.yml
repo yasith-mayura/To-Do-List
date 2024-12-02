@@ -1,0 +1,31 @@
+version: '3.8'
+
+networks:
+  app-network:  # Define a custom network
+    driver: bridge
+
+services:
+  frontend:
+    build:
+      context: ./Frontend  # Path to the React Vite app
+      dockerfile: Dockerfile
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/mayura/todolist-frontend:latest
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_REGION}
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./Backend  # Path to the Ballerina app
+      dockerfile: Dockerfile
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/mayura/todolist-backend:latest
+
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_REGION}
+    networks:
+      - app-network
