@@ -67,9 +67,9 @@ jobs:
          ssh -o StrictHostKeyChecking=no -i mykey.pem -L 2222:${{ secrets.PRIVATE_EC2_HOST }}:22 ${{ secrets.EC2_USER }}@${{ secrets.PUBLIC_EC2_HOST }} -N &
      
          # Give some time for the SSH tunnel to establish
-         sleep 5
+          sleep 5
      
-         echo "SSH tunnel established to private EC2 on port 2222!"
+          echo "SSH tunnel established to private EC2 on port 2222!"
      
     - name: Deploy to Private EC2
       run: |
@@ -94,4 +94,4 @@ jobs:
           docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-backend:latest
     
           docker run -d --name todolist-backend -p 9090:9090 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-backend:latest
-       EOF
+         EOF
