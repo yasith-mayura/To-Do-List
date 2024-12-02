@@ -78,6 +78,8 @@ jobs:
            # Deployment commands for the private EC2
            echo "Deploying to private EC2!"
            # Add your deployment commands here
+          
+          sudo -i
       
 
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
