@@ -3,10 +3,14 @@ FROM ballerina/ballerina:2201.10.3 AS build
 
 # Set the working directory inside the container
 WORKDIR /ballerina
-RUN chmod -R 777 /ballerina
 
 # Copy your Ballerina code into the container
 COPY . .
+RUN chmod -R 777 /ballerina/Dependencies.toml
+
+#Remove existing built files
+RUN rm -f /ballerina/target/bin/Todo_service.jar
+
 
 # Build the Ballerina application
 RUN bal clean 
