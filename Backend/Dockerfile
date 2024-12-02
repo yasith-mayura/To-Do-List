@@ -3,11 +3,13 @@ FROM ballerina/ballerina:2201.10.3 AS build
 
 # Set the working directory inside the container
 WORKDIR /ballerina
+RUN chmod -R 777 /ballerina
 
 # Copy your Ballerina code into the container
 COPY . .
 
 # Build the Ballerina application
+RUN bal pull
 RUN bal clean && bal build
 
 #--------------------------------------------------------------------------
