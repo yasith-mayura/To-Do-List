@@ -101,4 +101,4 @@ jobs:
     
           docker run -d --name todolist-backend -p 9090:9090 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-backend:latest
 
-          EOF
+        EOF
