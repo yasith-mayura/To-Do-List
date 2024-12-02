@@ -15,7 +15,9 @@ const Background = () => {
 
   useEffect(() => {
     axios
-      .get<Todolist[]>("http://10.0.198.2:9090/todo-service/todos")
+      .get<Todolist[]>("http://10.0.198.2:9090/todo-service/todos",{
+        timeout: 60000  // 60 seconds
+      })
       .then((res) => setToDoList(res.data))
       .catch((err) => console.error("Error fetching todos", err));
   }, []);
