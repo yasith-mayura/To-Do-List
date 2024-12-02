@@ -95,9 +95,13 @@ jobs:
           docker stop todolist-backend || true 
           docker rm todolist-backend || true
 
+          docker network create --driver bridge network2
+
           docker system prune -f
 
           docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-backend:latest
     
-          docker run -d --name todolist-backend -p 9090:9090 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-backend:latest
-         EOF
+          docker run -d --name todolist-backend --network network2 -p 9090:9090 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mayura/todolist-backend:latest
+          docker network connect network1 todolist-frontend
+
+          EOF
