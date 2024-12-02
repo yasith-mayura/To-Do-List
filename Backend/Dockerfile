@@ -9,9 +9,8 @@ RUN chmod -R 777 /ballerina
 COPY . .
 
 # Build the Ballerina application
-RUN bal clean --verbose
-RUN bal build --verbose
-
+RUN bal clean 
+RUN bal build 
 #--------------------------------------------------------------------------
 
 # Stage 2: Use a lightweight JRE-based image to run the application
