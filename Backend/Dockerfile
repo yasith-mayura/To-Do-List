@@ -13,7 +13,7 @@ RUN bal clean && bal build
 #--------------------------------------------------------------------------
 
 # Stage 2: Use a lightweight JRE-based image to run the application
-FROM openjdk:21-jdk-alpine AS runtime
+FROM openjdk AS runtime
 
 # Set the working directory inside the container
 WORKDIR /app
