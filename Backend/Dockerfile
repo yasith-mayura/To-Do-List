@@ -9,7 +9,8 @@ RUN chmod -R 777 /ballerina
 COPY . .
 
 # Build the Ballerina application
-RUN bal clean && bal build
+RUN bal clean --verbose
+RUN bal build --verbose
 
 #--------------------------------------------------------------------------
 
