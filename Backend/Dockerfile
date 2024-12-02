@@ -6,7 +6,7 @@ WORKDIR /ballerina
 
 # Copy your Ballerina code into the container
 COPY . .
-RUN chmod -R 777 /ballerina/Dependencies.toml
+RUN ls -l /ballerina
 
 #Remove existing built files
 RUN rm -f /ballerina/target/bin/Todo_service.jar
