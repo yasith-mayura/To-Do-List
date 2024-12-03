@@ -95,7 +95,7 @@ jobs:
         with:
           src: ./Frontend/dist/
           host: ${{ secrets.PUBLIC_EC2_HOST }}
-          remote: /var/www/to-do
+          remote: /var/www/to-do/
           port: 22
           user: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
