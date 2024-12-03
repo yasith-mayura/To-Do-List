@@ -15,7 +15,7 @@ const Background = () => {
 
   useEffect(() => {
     axios
-      .get<Todolist[]>("http://10.0.198.2:9090/todo-service/todos",{
+      .get<Todolist[]>("http://10.0.184.32:9090/todo-service/todos",{
         timeout: 60000  // 60 seconds
       })
       .then((res) => setToDoList(res.data))
@@ -39,7 +39,7 @@ const Background = () => {
     const originalTodos = [...toDoList];
 
     axios
-      .post("http://10.0.198.2:9090/todo-service/todos", newTodo)
+      .post("http://10.0.184.32:9090/todo-service/todos", newTodo)
       .then((res) => setToDoList([res.data, ...toDoList]))
       .catch((err) => {
         console.log(err);
@@ -52,7 +52,7 @@ const Background = () => {
     setToDoList(toDoList.filter((t) => t.id !== id));
 
     axios
-      .delete(`http://10.0.198.2:9090/todo-service/todos/${id}`)
+      .delete(`http://10.0.184.32:9090/todo-service/todos/${id}`)
       .catch((err) => {
         console.log(err);
         setToDoList(originalTodos);
@@ -69,7 +69,7 @@ const Background = () => {
       setToDoList(updatedTasks);
     }
 
-    axios.put("http://10.0.198.2:9090/todo-service/todos/" + id).catch((err) => {
+    axios.put("http://10.0.184.32:9090/todo-service/todos/" + id).catch((err) => {
       console.log(err);
       setToDoList(originalTodos);
     });
