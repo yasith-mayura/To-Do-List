@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            sudo mv ./build /usr/share/nginx/html/
+            sudo mv ./dist /usr/share/nginx/html/
 
 
       # Step 6: Configure Nginx on the EC2 instance
