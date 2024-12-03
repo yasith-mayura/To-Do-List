@@ -2,8 +2,8 @@ name: Frontend Build and Push Docker Image To AWS ECR Repo
 
 on:
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
   workflow_dispatch:
 
 jobs:
