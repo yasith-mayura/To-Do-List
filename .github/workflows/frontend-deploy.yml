@@ -40,29 +40,6 @@ jobs:
           npm run build
     
 
-      # Step 4: Transfer the `build` directory to the EC2 instance
-      - name: scp action
-        uses: c0c1/scp-action@v1.0
-  
-        with:
-          src: ./Frontend/dist
-          host: ${{ secrets.PUBLIC_EC2_HOST }}
-          remote: ./
-          port: 22
-          user: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-
-      # Step 5: Move build files
-      - name: move build files
-        uses: appleboy/ssh-action@v1.2.0
-  
-        with:
-          host: ${{ secrets.PUBLIC_EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            sudo mv ./dist /usr/share/nginx/html/
-
 
       # Step 6: Configure Nginx on the EC2 instance
       - name: SSH Remote Commands
@@ -74,11 +51,11 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             sudo -i
-            sudo mkdir -p /usr/share/nginx/html/dist
 
             # Ensure Nginx is installed
             sudo apt update
             sudo apt install -y nginx
+            mkdir -p /usr/share/nginx/html/dist
 
             # Configure Nginx
             sudo bash -c "cat > /etc/nginx/sites-available/to-do <<EOF
@@ -101,4 +78,31 @@ jobs:
             sudo systemctl reload nginx
 
 
+        # Step 4: Transfer the `build` directory to the EC2 instance
+      - name: scp action
+        uses: c0c1/scp-action@v1.0
+  
+        with:
+          src: ./Frontend/dist
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          remote: ./
+          port: 22
+          user: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+
+      # Step 5: Move build files
+      - name: move build files
+        uses: appleboy/ssh-action@v1.2.0
+  
+        with:
+          host: ${{ secrets.PUBLIC_EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            sudo mv -p ./dist /usr/share/nginx/html/
+
+            # Enable the configuration
+            sudo nginx -t
+            sudo systemctl restart nginx
+            sudo systemctl reload nginx
 
