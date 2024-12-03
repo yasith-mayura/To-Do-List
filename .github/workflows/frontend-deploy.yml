@@ -54,7 +54,14 @@ jobs:
 
             # Ensure Nginx is installed
             sudo apt update
-            sudo apt install -y nginx
+
+            # Check if Nginx is already installed
+            if ! dpkg -l | grep -q nginx; then
+                echo "Nginx is not installed. Installing..."
+                sudo apt install -y nginx
+            else
+                echo "Nginx is already installed. Skipping installation."
+            fi
             mkdir -p /usr/share/nginx/html/dist
 
             # Configure Nginx
@@ -99,7 +106,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            sudo mv -p ./dist /usr/share/nginx/html/
+            sudo mv ./dist /usr/share/nginx/html/
 
             # Enable the configuration
             sudo nginx -t
