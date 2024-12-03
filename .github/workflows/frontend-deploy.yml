@@ -73,7 +73,7 @@ jobs:
                 index index.html;
 
                 location / {
-                    try_files \$uri \$uri/ /index.html;  # Corrected try_files
+                    try_files \\$uri \\$uri/ /index.html;  # Corrected try_files
                 }
             }
             EOF"
