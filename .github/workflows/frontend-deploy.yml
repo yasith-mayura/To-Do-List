@@ -36,6 +36,7 @@ jobs:
       # Step 3: Install dependencies and build the React app
       - name: Build
         run: |
+          cd Frontend
           npm run build
 
       # Step 4: Transfer the `build` directory to the EC2 instance
