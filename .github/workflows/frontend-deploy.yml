@@ -61,7 +61,7 @@ jobs:
             server {
                 listen 80;
                 server_name ${{ secrets.PUBLIC_EC2_HOST }};
-                root /var/www/to-do/dist;
+                root /var/www/to-do;
                 index index.html;
 
                 location / {
@@ -71,7 +71,7 @@ jobs:
             EOF"
 
             # Enable the configuration
-            sudo ln -sf /etc/nginx/sites-available/react-app /etc/nginx/sites-enabled/
+            sudo ln -sf /etc/nginx/sites-available/to-do /etc/nginx/sites-enabled/
             sudo nginx -t
             sudo systemctl restart nginx
 
@@ -80,7 +80,7 @@ jobs:
         uses: c0c1/scp-action@v1.0
   
         with:
-          src: ./Frontend/dist
+          src: ./Frontend/dist/
           host: ${{ secrets.PUBLIC_EC2_HOST }}
           remote: /var/www/to-do
           port: 22
