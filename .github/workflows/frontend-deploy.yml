@@ -81,7 +81,7 @@ jobs:
             #     }
             # }" | sudo tee /etc/nginx/sites-available/to-do > /dev/null
 
-            server {
+            echo "server {
                 listen 80;
                 server_name yasithmayura.me www.yasithmayura.me;
 
@@ -90,7 +90,7 @@ jobs:
             }
 
 
-            echo "server {
+            server {
                 listen 443 ssl;
                 server_name yasithmayura.me www.yasithmayura.me;
 
