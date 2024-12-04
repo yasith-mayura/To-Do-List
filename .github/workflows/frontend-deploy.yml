@@ -62,14 +62,15 @@ jobs:
             if ! dpkg -l | grep -q nginx; then
                 echo "Nginx is not installed. Installing..."
                 sudo apt install -y nginx
+                rm -rf /etc/nginx/sites-available/default
             else
                 echo "Nginx is already installed. Skipping installation."
             fi
             mkdir -p /usr/share/nginx/html/dist
 
             # Configure Nginx
-            sudo bash -c "cat > /etc/nginx/sites-available/to-do <<'EOF'
-            server {
+            
+            echo "server {
                 listen 80;
                 server_name ${PUBLIC_EC2_HOST};
                 root /usr/share/nginx/html/dist;
@@ -78,8 +79,7 @@ jobs:
                 location / {
                     try_files \$uri \$uri/ /index.html;  # Corrected try_files
                 }
-            }
-            EOF"
+            }" | sudo tee /etc/nginx/sites-available/to-do > /dev/null
 
             # Enable the configuration
             sudo ln -sf /etc/nginx/sites-available/to-do /etc/nginx/sites-enabled/
