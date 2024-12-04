@@ -67,19 +67,57 @@ jobs:
 
             # Configure Nginx
             
-            echo "server {
+            # echo "server {
+            #     listen 80;
+            #     server_name 34.236.243.37;
+            #     root /usr/share/nginx/html/dist;
+            #     index index.html;
+
+            #     location / {
+            #         try_files \$uri \$uri/ /index.html;  # Corrected try_files
+            #     }
+            #     location /todo-service/todos {
+            #         proxy_pass http://10.0.184.32;
+            #     }
+            # }" | sudo tee /etc/nginx/sites-available/to-do > /dev/null
+
+            server {
                 listen 80;
-                server_name 34.236.243.37;
+                server_name yasithmayura.me www.yasithmayura.me;
+
+                # Redirect all HTTP traffic to HTTPS
+                return 301 https://$host$request_uri;
+            }
+
+
+            echo "server {
+                listen 443 ssl;
+                server_name yasithmayura.me www.yasithmayura.me;
+
+                # SSL configuration
+                ssl_certificate /etc/letsencrypt/live/yasithmayura.me/fullchain.pem;
+                ssl_certificate_key /etc/letsencrypt/live/yasithmayura.me/privkey.pem;
+                ssl_trusted_certificate /etc/letsencrypt/live/yasithmayura.me/chain.pem;
+
+                # SSL optimization
+                ssl_protocols TLSv1.2 TLSv1.3;
+                ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+                ssl_prefer_server_ciphers on;
+
+                # Root and index
                 root /usr/share/nginx/html/dist;
                 index index.html;
 
+                # Basic Nginx setup
                 location / {
-                    try_files \$uri \$uri/ /index.html;  # Corrected try_files
+                    try_files $uri $uri/ /index.html;
                 }
+
                 location /todo-service/todos {
                     proxy_pass http://10.0.184.32:9090;
                 }
             }" | sudo tee /etc/nginx/sites-available/to-do > /dev/null
+
 
             # Enable the configuration
             sudo ln -sf /etc/nginx/sites-available/to-do /etc/nginx/sites-enabled/
