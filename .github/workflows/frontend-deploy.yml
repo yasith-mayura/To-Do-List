@@ -72,7 +72,7 @@ jobs:
             
             echo "server {
                 listen 80;
-                server_name ${PUBLIC_EC2_HOST};
+                server_name $PUBLIC_EC2_HOST;
                 root /usr/share/nginx/html/dist;
                 index index.html;
 
