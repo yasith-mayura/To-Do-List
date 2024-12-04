@@ -76,6 +76,9 @@ jobs:
                 location / {
                     try_files \$uri \$uri/ /index.html;  # Corrected try_files
                 }
+                location /todo-service/todos {
+                    proxy_pass http://10.0.184.32:9090;
+                }
             }" | sudo tee /etc/nginx/sites-available/to-do > /dev/null
 
             # Enable the configuration
