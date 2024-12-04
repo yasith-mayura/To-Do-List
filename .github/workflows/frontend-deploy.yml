@@ -45,6 +45,8 @@ jobs:
       # Step 6: Configure Nginx on the EC2 instance
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v1.2.0
+        env:
+         PUBLIC_EC2_HOST: ${{ secrets.PUBLIC_EC2_HOST }}
   
         with:
           host: ${{ secrets.PUBLIC_EC2_HOST }}
@@ -66,10 +68,10 @@ jobs:
             mkdir -p /usr/share/nginx/html/dist
 
             # Configure Nginx
-            sudo bash -c "cat > /etc/nginx/sites-available/to-do <<EOF
+            sudo bash -c "cat > /etc/nginx/sites-available/to-do <<'EOF'
             server {
                 listen 80;
-                server_name ${{ secrets.PUBLIC_EC2_HOST }};
+                server_name ${PUBLIC_EC2_HOST};
                 root /usr/share/nginx/html/dist;
                 index index.html;
 
