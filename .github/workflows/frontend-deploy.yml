@@ -79,7 +79,7 @@ jobs:
                 location / {
                     try_files \$uri \$uri/ /index.html;  # Corrected try_files
                 }
-            }" | sudo tee /etc/nginx/sites-available/to-do > /dev/null
+            }" | envsubst | sudo tee /etc/nginx/sites-available/to-do > /dev/null
 
             # Enable the configuration
             sudo ln -sf /etc/nginx/sites-available/to-do /etc/nginx/sites-enabled/
