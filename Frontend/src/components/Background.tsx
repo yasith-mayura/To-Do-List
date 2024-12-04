@@ -15,7 +15,7 @@ const Background = () => {
 
   useEffect(() => {
     axios
-      .get<Todolist[]>("http://34.236.243.37/todo-service/todos",{
+      .get<Todolist[]>("https://34.236.243.37/todo-service/todos",{
         timeout: 60000  // 60 seconds
       })
       .then((res) => setToDoList(res.data))
@@ -39,7 +39,7 @@ const Background = () => {
     const originalTodos = [...toDoList];
 
     axios
-      .post("http://34.236.243.37/todo-service/todos", newTodo)
+      .post("https://34.236.243.37/todo-service/todos", newTodo)
       .then((res) => setToDoList([res.data, ...toDoList]))
       .catch((err) => {
         console.log(err);
@@ -52,7 +52,7 @@ const Background = () => {
     setToDoList(toDoList.filter((t) => t.id !== id));
 
     axios
-      .delete(`http://34.236.243.37/todo-service/todos/${id}`)
+      .delete(`https://34.236.243.37/todo-service/todos/${id}`)
       .catch((err) => {
         console.log(err);
         setToDoList(originalTodos);
@@ -69,7 +69,7 @@ const Background = () => {
       setToDoList(updatedTasks);
     }
 
-    axios.put("http://34.236.243.37/todo-service/todos/" + id).catch((err) => {
+    axios.put("https://34.236.243.37/todo-service/todos/" + id).catch((err) => {
       console.log(err);
       setToDoList(originalTodos);
     });
