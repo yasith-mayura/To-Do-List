@@ -40,13 +40,10 @@ jobs:
           cd Frontend
           npm run build
     
-
-
+ 
       # Step 6: Configure Nginx on the EC2 instance
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v1.2.0
-        env:
-         PUBLIC_EC2_HOST: ${{ secrets.PUBLIC_EC2_HOST }}
   
         with:
           host: ${{ secrets.PUBLIC_EC2_HOST }}
@@ -72,14 +69,14 @@ jobs:
             
             echo "server {
                 listen 80;
-                server_name $PUBLIC_EC2_HOST;
+                server_name 34.236.243.37;
                 root /usr/share/nginx/html/dist;
                 index index.html;
 
                 location / {
                     try_files \$uri \$uri/ /index.html;  # Corrected try_files
                 }
-            }" | envsubst | sudo tee /etc/nginx/sites-available/to-do > /dev/null
+            }" | sudo tee /etc/nginx/sites-available/to-do > /dev/null
 
             # Enable the configuration
             sudo ln -sf /etc/nginx/sites-available/to-do /etc/nginx/sites-enabled/
