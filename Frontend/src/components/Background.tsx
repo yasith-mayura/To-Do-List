@@ -45,7 +45,7 @@ const Background = () => {
   };
 
   const deleteTask = (id: number) => {
-    const originalTodos = [...toDoList];
+    // const originalTodos = [...toDoList];
     setToDoList(toDoList.filter((t) => t.id !== id));
 
     axios 
