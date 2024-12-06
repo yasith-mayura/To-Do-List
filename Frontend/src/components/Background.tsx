@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import DoneTask from "./DoneTask";
 import ToDoTask from "./ToDoTask";
 import { FaPlus } from "react-icons/fa6";
 import axios from "axios";
@@ -15,7 +14,8 @@ const Background = () => {
 
   useEffect(() => {
     axios
-      .get<Todolist[]>("https://yasithmayura.me/todo-service/todos/", {
+      .get<Todolist[]>("http://localhost:9090/todo-service/todos/", {
+      // .get<Todolist[]>("https://yasithmayura.me/todo-service/todos/", {
         timeout: 60000, // 60 seconds
       })
       .then((res) => setToDoList(res.data))
@@ -33,7 +33,8 @@ const Background = () => {
     const originalTodos = [...toDoList];
 
     axios
-      .post("https://yasithmayura.me/todo-service/todos/", newTodo)
+      .post("http://localhost:9090/todo-service/todos/", newTodo)
+      // .post("https://yasithmayura.me/todo-service/todos/", newTodo)
       .then((res) => {
         setToDoList([res.data, ...toDoList]);
         setNewTodo({ title: "", completed: false }); // Reset input field
@@ -49,7 +50,8 @@ const Background = () => {
     setToDoList(toDoList.filter((t) => t.id !== id));
 
     axios 
-      .delete(`https://yasithmayura.me/todo-service/todos/${id}`)
+      .delete(`http://localhost:9090/todo-service/todos/${id}`)
+      // .delete(`https://yasithmayura.me/todo-service/todos/${id}`)
       .then(() => {
         setToDoList((prev) => prev.filter((t) => t.id !== id)); // Optimistic UI update
       })
@@ -74,7 +76,8 @@ const Background = () => {
       
           // Send the update to the backend
           axios
-            .put(`https://yasithmayura.me/todo-service/todos/${id}`, updatedTodo)
+            .put(`http://localhost:9090/todo-service/todos/${id}`, updatedTodo)
+            // .put(`https://yasithmayura.me/todo-service/todos/${id}`, updatedTodo)
             .catch((err) => {
               console.error("Failed to update the task:", err);
               setToDoList(originalTodos); // Revert changes on failure
@@ -118,9 +121,6 @@ const Background = () => {
       <h3 className="text-[#FFFFFF]">
         Done - {toDoList.filter((t) => t.completed).length}
       </h3>
-      <div>
-        <DoneTask tasks={toDoList.filter((t) => t.completed)} />
-      </div>
     </div>
   );
 };
