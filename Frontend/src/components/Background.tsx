@@ -14,8 +14,8 @@ const Background = () => {
 
   useEffect(() => {
     axios
-      .get<Todolist[]>("http://localhost:9090/todo-service/todos/", {
-      // .get<Todolist[]>("https://yasithmayura.me/todo-service/todos/", {
+      // .get<Todolist[]>("http://localhost:9090/todo-service/todos/", {
+      .get<Todolist[]>("https://yasithmayura.me/todo-service/todos/", {
         timeout: 60000, // 60 seconds
       })
       .then((res) => setToDoList(res.data))
@@ -33,8 +33,8 @@ const Background = () => {
     const originalTodos = [...toDoList];
 
     axios
-      .post("http://localhost:9090/todo-service/todos/", newTodo)
-      // .post("https://yasithmayura.me/todo-service/todos/", newTodo)
+      // .post("http://localhost:9090/todo-service/todos/", newTodo)
+      .post("https://yasithmayura.me/todo-service/todos/", newTodo)
       .then((res) => {
         setToDoList([res.data, ...toDoList]);
         setNewTodo({ title: "", completed: false }); // Reset input field
@@ -50,8 +50,8 @@ const Background = () => {
     setToDoList(toDoList.filter((t) => t.id !== id));
 
     axios 
-      .delete(`http://localhost:9090/todo-service/todos/${id}`)
-      // .delete(`https://yasithmayura.me/todo-service/todos/${id}`)
+      // .delete(`http://localhost:9090/todo-service/todos/${id}`)
+      .delete(`https://yasithmayura.me/todo-service/todos/${id}`)
       .then(() => {
         setToDoList((prev) => prev.filter((t) => t.id !== id)); // Optimistic UI update
       })
@@ -76,8 +76,8 @@ const Background = () => {
       
           // Send the update to the backend
           axios
-            .put(`http://localhost:9090/todo-service/todos/${id}`, updatedTodo)
-            // .put(`https://yasithmayura.me/todo-service/todos/${id}`, updatedTodo)
+            // .put(`http://localhost:9090/todo-service/todos/${id}`, updatedTodo)
+            .put(`https://yasithmayura.me/todo-service/todos/${id}`, updatedTodo)
             .catch((err) => {
               console.error("Failed to update the task:", err);
               setToDoList(originalTodos); // Revert changes on failure
