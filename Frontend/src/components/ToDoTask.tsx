@@ -11,35 +11,59 @@ const ToDoTask = ({
   tasks,
   onDeleteTask,
   onCompleteTask,
+  completed = false,
 }: {
   tasks: Todolist[];
   onDeleteTask: (id: number) => void;
   onCompleteTask: (id: number) => void;
+  completed?: boolean;
 }) => {
   return (
-    <div className="flex-col justify-between items-center">
+    <div className="flex-col justify-between items-center space-y-4">
       {tasks
-        .filter((item) => !item.completed) // Filter for incomplete tasks
+        .filter((item) => item.completed === completed)
         .map((item) => (
           <div
-            className="text-left flex justify-between px-6 py-5 my-4 bg-[#070814] text-[#0AB6FF] rounded-md"
             key={item.id}
+            className={`transform transition-all duration-300 hover:scale-[1.01] 
+              text-left flex justify-between items-center px-4 py-2 
+              ${
+                completed
+                  ? "bg-gradient-to-r from-[#024732] to-[#0a533d] text-emerald-300"
+                  : "bg-gradient-to-r from-[#123b63] to-[#0b2845] text-[#16b0f8]"
+              } 
+              rounded-xl shadow-lg border border-[#2980B9] 
+              w-full sm:px-6 sm:py-5 group`}
           >
-            <div className="flex-grow">{item.title}</div>
+            <div
+              className={`flex-grow text-sm sm:text-base mr-2 truncate ${
+                completed ? "line-through text-emerald-300" : "text-[#16b0f8]"
+              }`}
+            >
+              {item.title}
+            </div>
             <div className="flex space-x-2">
+              {!completed && (
+                <button
+                  className="p-2 bg-[#405a75] rounded-md hover:bg-[#06e53e] 
+                  transition duration-300 ease-in-out
+                  w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center 
+                  group-hover:bg-opacity-80"
+                  onClick={() => onCompleteTask(item.id)}
+                  aria-label="Complete Task"
+                >
+                  <FaCheck className="text-[#FFFFFF] text-sm sm:text-base" />
+                </button>
+              )}
               <button
-                className="p-2 bg-[#181B25] rounded-md hover:bg-[#0AB6FF] transition"
-                onClick={() => onCompleteTask(item.id)}
-                aria-label="Complete Task"
-              >
-                <FaCheck className="text-[#FFFFFF]" />
-              </button>
-              <button
-                className="p-2 bg-[#181B25] rounded-md hover:bg-[#FF0000] transition"
+                className="p-2 bg-[#405a75] rounded-md hover:bg-[#e51c06] 
+                  transition duration-300 ease-in-out
+                  w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center 
+                  group-hover:bg-opacity-80"
                 onClick={() => onDeleteTask(item.id)}
                 aria-label="Delete Task"
               >
-                <MdDeleteOutline className="text-[#FFFFFF]" />
+                <MdDeleteOutline className="text-[#FFFFFF] text-sm sm:text-base" />
               </button>
             </div>
           </div>
