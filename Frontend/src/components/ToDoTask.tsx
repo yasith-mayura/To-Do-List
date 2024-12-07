@@ -29,8 +29,8 @@ const ToDoTask = ({
               text-left flex justify-between items-center px-4 py-2 
               ${
                 completed
-                  ? "bg-gradient-to-r from-[#024732] to-[#0a533d] text-emerald-300"
-                  : "bg-gradient-to-r from-[#123b63] to-[#0b2845] text-[#16b0f8]"
+                  ? "bg-gradient-to-r from-[#024732] to-[#02382b] text-emerald-300"
+                  : "bg-gradient-to-r from-[#123b63] to-[#013262] text-[#16b0f8]"
               } 
               rounded-xl shadow-lg border border-[#2980B9] 
               w-full sm:px-6 sm:py-5 group`}
